@@ -8,11 +8,19 @@
  * Implements hook_permission().
  */
 function entity_embed_wysiwyg_permission() {
-  return array(
-    'administer entity_embed_wysiwyg' => array(
-      'title' => t('Administer Entity Embed WYSIWYG Settings'),
-    ),
+  $permissions = array();
+  $permissions['administer entity_embed_wysiwyg'] = array(
+    'title' => t('Administer Entity Embed WYSIWYG Settings'),
   );
+
+  // Create edit form dialog permissions for each entity type.
+  foreach (entity_get_info() as $entity_name => $entity) {
+    $permissions['edit ' . $entity_name . ' in entity_embed_wysiwyg dialog'] = array(
+      'title' => t('Edit ' . $entity_name . ' in Entity Embed Edit Dialog'),
+    );
+  }
+
+  return $permissions;
 }
 
 /**
@@ -27,6 +35,14 @@ function entity_embed_wysiwyg_menu() {
     'access arguments' => array('administer entity_embed_wysiwyg'),
     'file' => 'entity_embed_wysiwyg.admin.inc',
     'type' => MENU_LOCAL_TASK,
+  );
+  $items['admin/config/content/wysiwyg/entity_embed/entity_edit/%/%'] = array(
+    'title' => t('Edit Entity'),
+    'page callback' => 'entity_embed_wysiwyg_edit_entity',
+    'page arguments' => array(6, 7),
+    'access callback' => 'entity_embed_wysiwyg_edit_entity_access',
+    'access arguments' => array(6, 7),
+    'type' => MENU_CALLBACK,
   );
 
   return $items;
@@ -57,6 +73,48 @@ function entity_embed_wysiwyg_wysiwyg_plugin($editor, $version) {
       ),
     );
   }
+}
+
+/**
+ * Access callback for dialog edit forms.
+ *
+ * @param int $entity_id
+ *   ID of entity for which an edit form is being loaded.
+ * @param string $entity_Type
+ *   Type of entity for which an edit form is being loaded.
+ *
+ * @return string
+ *   HTML page of edit form for given entity.
+ */
+function entity_embed_wysiwyg_edit_entity_access($entity_id, $entity_type) {
+  if (user_access('edit ' . $entity_name . ' in entity_embed_wysiwyg dialog')) {
+    return TRUE;
+  }
+
+  return FALSE;
+}
+
+/**
+ * Page callback for dialog edit forms.
+ *
+ * @param int $entity_id
+ *   ID of entity for which an edit form is being loaded.
+ * @param string $entity_Type
+ *   Type of entity for which an edit form is being loaded.
+ *
+ * @return string
+ *   HTML page of edit form for given entity.
+ */
+function entity_embed_wysiwyg_edit_entity($entity_id, $entity_type) {
+  $entity = entity_load($entity_type, array($entity_id));
+
+  if (empty($entity)) {
+    drupal_set_message(t('Entity not found.'), 'error');
+    return;
+  }
+
+  $entity = $entity[$entity_id];
+  return entity_form($entity_type, $entity);
 }
 
 /**

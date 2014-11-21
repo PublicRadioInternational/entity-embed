@@ -18,13 +18,17 @@
           onOk: function() {
             if ('entity_embed_wysiwyg_entity' in window) {
               var embedString = [
-                '[[entity_id:',
+                '<a style="cursor:pointer" id="edit-entity" data-entity="',
+                window.entity_embed_wysiwyg_entity.id,
+                '" data-entity-type="',
+                window.entity_embed_wysiwyg_entity.type,
+                '">[[entity_id:',
                 window.entity_embed_wysiwyg_entity.id,
                 ' entity_type:',
                 window.entity_embed_wysiwyg_entity.type,
                 ' entity_title:',
                 window.entity_embed_wysiwyg_entity.title,
-                ']]'
+                ']]</a>'
               ].join('');
               editor.insertHtml(embedString);
             }
@@ -43,6 +47,8 @@
         };
       });
 
+      // Create a Dialog that loads an edit form for embeded entities.
+
       // Create our command for launching the node edit form.
       editor.addCommand('launch_entity_embed_select', new CKEDITOR.dialogCommand('select_entity'));
 
@@ -54,4 +60,7 @@
       });
     }
   });
+
+  // Handle event of an embed code being clicked.
+
 })(jQuery);
