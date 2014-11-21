@@ -1,0 +1,85 @@
+<?php
+/**
+ * @file
+ * Defines WYSIWYG plugins for entity_embed.
+ */
+
+/**
+ * Implements hook_permission().
+ */
+function entity_embed_wysiwyg_permission() {
+  return array(
+    'administer entity_embed_wysiwyg' => array(
+      'title' => t('Administer Entity Embed WYSIWYG Settings'),
+    ),
+  );
+}
+
+/**
+ * Impliments hook_menu()
+ */
+function entity_embed_wysiwyg_menu() {
+  $items['admin/config/content/wysiwyg/entity_embed'] = array(
+    'title' => t('Entity Embed'),
+    'description' => t('Configure Entity Embed WYSIWYG.'),
+    'page callback' => 'drupal_get_form',
+    'page arguments' => array('entity_embed_wysiwyg_admin_form'),
+    'access arguments' => array('administer entity_embed_wysiwyg'),
+    'file' => 'entity_embed_wysiwyg.admin.inc',
+    'type' => MENU_LOCAL_TASK,
+  );
+
+  return $items;
+}
+
+/**
+ * Implements hook_views_api().
+ */
+function entity_embed_wysiwyg_views_api() {
+  return array(
+    'api' => 3.0,
+    'path' => drupal_get_path('module', 'entity_embed_wysiwyg'),
+  );
+}
+
+/**
+ * Implements hook_wysiwyg_plugin().
+ */
+function entity_embed_wysiwyg_wysiwyg_plugin($editor, $version) {
+  if ($editor == 'ckeditor') {
+    return array(
+      'entity_embed_wysiwyg_plugin' => array(
+        'path' => drupal_get_path('module', 'entity_embed_wysiwyg') . '/ckeditor',
+        'buttons' => array(
+          'entity_embed_wysiwyg_add_token' => t('Embed an Entity'),
+        ),
+        'load' => TRUE,
+      ),
+    );
+  }
+}
+
+/**
+ * Implements hook_js_alter()
+ */
+function entity_embed_wysiwyg_js_alter(&$javascript) {
+  if (current_path() == 'admin/config/content/wysiwyg/entity_embed/select') {
+    $admin_menu_path = drupal_get_path('module', 'admin_menu');
+    unset($javascript[$admin_menu_path . '/admin_menu.js']);
+    unset($javascript[$admin_menu_path . '/admin_menu_toolbar.js']);
+  }
+}
+
+/**
+ * Implements hook_css_alter()
+ */
+function entity_embed_wysiwyg_css_alter(&$css) {
+  if (current_path() == 'admin/config/content/wysiwyg/entity_embed/select') {
+    $path = drupal_get_path('module', 'entity_embed_wysiwyg') . '/ckeditor/entity_embed_wysiwyg.css';
+    $css[$path] = array(
+      'every_page' => FALSE,
+      'type' => 'file',
+      'data' => $path,
+    );
+  }
+}

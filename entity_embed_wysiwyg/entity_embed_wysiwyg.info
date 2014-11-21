@@ -1,0 +1,12 @@
+name = Entity Embed WYSIWYG
+description = Integrates Entity Embed into WYSIWYG editors.
+package = Entity
+core = 7.x
+
+configure = admin/config/content/wysiwyg/entity_embed
+
+dependencies[] = wysiwyg
+dependencies[] = entity_embed
+dependencies[] = views
+
+files[] = entity_embed_wysiwyg.views_default.inc

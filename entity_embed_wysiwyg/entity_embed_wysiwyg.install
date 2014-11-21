@@ -1,0 +1,21 @@
+<?php
+/**
+ * @file
+ * Handles Install/uninstall/disable/update events.
+ */
+
+/**
+ * Impliments hook_uninstall()
+ */
+function entity_embed_wysiwyg_uninstall() {
+
+  // Create an array of variables that should be deleted.
+  $variables = array(
+    'entity_embed_wysiwyg_view'
+  );
+
+  // Loop through variables and delete each one.
+  foreach ($variables as $variable) {
+    variable_del($variable);
+  }
+}

@@ -1,0 +1,13 @@
+.view-content tr {
+  cursor: pointer;
+}
+
+.view-content tr.selected-entity,
+.view-content tr:hover {
+  background: #5cb85c;
+}
+
+.view-content tr.selected-entity a,
+.view-content tr:hover a {
+  color: #ffffff;
+}
