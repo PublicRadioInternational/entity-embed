@@ -37,12 +37,21 @@ function entity_embed_wysiwyg_views_default_views() {
   $handler->display->display_options['fields']['title']['field'] = 'title';
   $handler->display->display_options['fields']['title']['alter']['word_boundary'] = FALSE;
   $handler->display->display_options['fields']['title']['alter']['ellipsis'] = FALSE;
+  $handler->display->display_options['fields']['title']['element_class'] = 'entity_title';
   /* Field: Content: Nid */
   $handler->display->display_options['fields']['nid']['id'] = 'nid';
   $handler->display->display_options['fields']['nid']['table'] = 'node';
   $handler->display->display_options['fields']['nid']['field'] = 'nid';
   $handler->display->display_options['fields']['nid']['label'] = 'Entity ID';
   $handler->display->display_options['fields']['nid']['element_class'] = 'entity_id';
+  /* Field: Entity ID */
+  $handler->display->display_options['fields']['nothing']['id'] = 'nothing';
+  $handler->display->display_options['fields']['nothing']['table'] = 'views';
+  $handler->display->display_options['fields']['nothing']['field'] = 'nothing';
+  $handler->display->display_options['fields']['nothing']['ui_name'] = 'Entity ID';
+  $handler->display->display_options['fields']['nothing']['label'] = 'Entity Type';
+  $handler->display->display_options['fields']['nothing']['alter']['text'] = 'node';
+  $handler->display->display_options['fields']['nothing']['element_class'] = 'entity_type';
   /* Sort criterion: Content: Post date */
   $handler->display->display_options['sorts']['created']['id'] = 'created';
   $handler->display->display_options['sorts']['created']['table'] = 'node';
@@ -100,6 +109,10 @@ function entity_embed_wysiwyg_views_default_views() {
     11 => 0,
     12 => 0,
   );
+
+  /* Display: Page */
+  $handler = $view->new_display('page', 'Page', 'page');
+  $handler->display->display_options['path'] = 'admin/config/content/wysiwyg/entity_embed/select';
 
   /* Display: Page */
   $handler = $view->new_display('page', 'Page', 'page');

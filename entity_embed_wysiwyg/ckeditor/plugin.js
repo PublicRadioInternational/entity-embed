@@ -16,8 +16,17 @@
           minWidth: 700,
           minHeight: 400,
           onOk: function() {
-            if ('entity_embed_wysiwyg_entity_id' in window) {
-              editor.insertHtml('<div class="embed">[[entity_id:' + window.entity_embed_wysiwyg_entity_id + ']]</div>');
+            if ('entity_embed_wysiwyg_entity' in window) {
+              var embedString = [
+                '[[entity_id:',
+                window.entity_embed_wysiwyg_entity.id,
+                ' entity_type:',
+                window.entity_embed_wysiwyg_entity.type,
+                ' entity_title:',
+                window.entity_embed_wysiwyg_entity.title,
+                ']]'
+              ].join('');
+              editor.insertHtml(embedString);
             }
           },
           contents: [{
