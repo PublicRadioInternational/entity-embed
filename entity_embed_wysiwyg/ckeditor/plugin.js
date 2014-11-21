@@ -15,6 +15,11 @@
           title: Drupal.t('Embed an Entity'),
           minWidth: 700,
           minHeight: 400,
+          onOk: function() {
+            if ('entity_embed_wysiwyg_entity_id' in window) {
+              editor.insertHtml('<div class="embed">[[entity_id:' + window.entity_embed_wysiwyg_entity_id + ']]</div>');
+            }
+          },
           contents: [{
             id: 'entity-embed-select',
             label: Drupal.t('Embed an Entity'),
@@ -23,15 +28,9 @@
               type: 'iframe',
               src: Drupal.settings.basePath + 'admin/config/content/wysiwyg/entity_embed/select',
               width: '100%',
-              height: '400px',
-              onContentLoad: function() {
-
-              },
+              height: '400px'
             }]
-          }],
-          onOk: function() {
-
-          }
+          }]
         };
       });
 
