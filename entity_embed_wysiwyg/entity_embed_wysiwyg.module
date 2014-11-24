@@ -121,7 +121,9 @@ function entity_embed_wysiwyg_edit_entity($entity_id, $entity_type) {
  * Implements hook_js_alter()
  */
 function entity_embed_wysiwyg_js_alter(&$javascript) {
-  if (current_path() == 'admin/config/content/wysiwyg/entity_embed/select') {
+  $current_path = current_path();
+  if ($current_path == 'admin/config/content/wysiwyg/entity_embed/select' ||
+      strpos($current_path, 'admin/config/content/wysiwyg/entity_embed/entity_edit') !== false) {
     // Remove admin_menu.
     $admin_menu_path = drupal_get_path('module', 'admin_menu');
     unset($javascript[$admin_menu_path . '/admin_menu.js']);
