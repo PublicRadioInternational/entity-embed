@@ -18,7 +18,7 @@
           onOk: function() {
             if ('entity_embed_wysiwyg_entity' in window) {
               var embedString = [
-                '<a style="cursor:pointer" class="edit-entity" data-entity="',
+                '<a style="cursor:pointer" id="edit-entity" data-entity="',
                 window.entity_embed_wysiwyg_entity.id,
                 '" data-entity-type="',
                 window.entity_embed_wysiwyg_entity.type,
@@ -80,21 +80,38 @@
         command: 'launch_entity_embed_select',
         icon: this.path + 'add_embed_token.png'
       });
+
+      // Makes sure dialogs don't launch twice.
+      var launchedDialog = false;
+
+      // Launch modal when edit-entity is clicked.
+      var launchModalOnClick = function(element) {
+        if (element && launchedDialog === false) {
+          editor.editable().attachListener(element, 'click', function() {
+            var data = $(this.$).data();
+            window.entity_embed_wysiwyg_entity_edit = {
+              id: data['entity'],
+              type: data['entity-type']
+            }
+            editor.commands.launch_entity_embed_edit.exec();
+          });
+
+          launchedDialog = true;
+        }
+      };
+
+      // Add listener to editor.
+      editor.on('contentDom', function() {
+        var element = editor.document.getById('edit-entity');
+        launchModalOnClick(element);
+        launchedDialog = false;
+      });
+      editor.on('change', function() {
+        var element = editor.document.getById('edit-entity');
+        launchModalOnClick(element);
+        launchedDialog = false;
+      });
     }
   });
 
-  // Loop through instanes, on change bind event to anchors.
-  for (var instance in CKEDITOR.instances) {
-    CKEDITOR.instances[instance].on('change', function() {
-      $('iframe.cke_wysiwyg_frame').contents().find('a.edit-entity').bind('click', function() {
-        var data = $(this).data();
-        window.entity_embed_wysiwyg_entity_edit = {
-          id: data['entity'],
-          type: data['entity-type']
-        }
-
-        CKEDITOR.instances[instance].commands.launch_entity_embed_edit.exec();
-      });
-    });
-  }
 })(jQuery);
