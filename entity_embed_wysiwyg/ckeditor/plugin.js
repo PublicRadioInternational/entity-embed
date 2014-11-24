@@ -18,7 +18,7 @@
           onOk: function() {
             if ('entity_embed_wysiwyg_entity' in window) {
               var embedString = [
-                '<a style="cursor:pointer" id="edit-entity" data-entity="',
+                '<a style="cursor:pointer" id="edit-entity-unevented" data-entity="',
                 window.entity_embed_wysiwyg_entity.id,
                 '" data-entity-type="',
                 window.entity_embed_wysiwyg_entity.type,
@@ -57,6 +57,9 @@
           minWidth: 700,
           minHeight: 400,
           buttons: [],
+          close: function() {
+            destroyCKE();
+          },
           contents: [{
             id: 'entity-embed-edit',
             label: Drupal.t('Edit an Entity'),
@@ -81,35 +84,33 @@
         icon: this.path + 'add_embed_token.png'
       });
 
-      // Makes sure dialogs don't launch twice.
-      var launchedDialog = false;
-
       // Launch modal when edit-entity is clicked.
       var launchModalOnClick = function(element) {
-        if (element && launchedDialog === false) {
+        if (element) {
           editor.editable().attachListener(element, 'click', function() {
-            var data = $(this.$).data();
+            var $this = $(this.$),
+                data = $this.data();
+            $this.attr('id', 'edit-entity');
+            console.log(data);
             window.entity_embed_wysiwyg_entity_edit = {
               id: data['entity'],
               type: data['entity-type']
             }
-            editor.commands.launch_entity_embed_edit.exec();
-          });
 
-          launchedDialog = true;
+            var dialog = new CKEDITOR.dialog(editor, 'edit_entity');
+            dialog.show();
+          });
         }
       };
 
       // Add listener to editor.
       editor.on('contentDom', function() {
-        var element = editor.document.getById('edit-entity');
+        var element = editor.document.getById('edit-entity-unevented');
         launchModalOnClick(element);
-        launchedDialog = false;
       });
       editor.on('change', function() {
-        var element = editor.document.getById('edit-entity');
+        var element = editor.document.getById('edit-entity-unevented');
         launchModalOnClick(element);
-        launchedDialog = false;
       });
     }
   });
