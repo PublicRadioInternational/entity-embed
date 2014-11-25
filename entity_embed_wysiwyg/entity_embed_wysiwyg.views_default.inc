@@ -5,7 +5,7 @@
  */
 
 /**
- * Implementation of hook_views_default_views().
+ * Implements hook_views_default_views().
  */
 function entity_embed_wysiwyg_views_default_views() {
   $view = new view();

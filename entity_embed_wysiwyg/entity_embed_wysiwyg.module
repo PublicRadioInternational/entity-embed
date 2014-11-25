@@ -24,12 +24,12 @@ function entity_embed_wysiwyg_permission() {
 }
 
 /**
- * Impliments hook_menu()
+ * Impliments hook_menu().
  */
 function entity_embed_wysiwyg_menu() {
   $items['admin/config/content/wysiwyg/entity_embed'] = array(
-    'title' => t('Entity Embed'),
-    'description' => t('Configure Entity Embed WYSIWYG.'),
+    'title' => 'Entity Embed',
+    'description' => 'Configure Entity Embed WYSIWYG.',
     'page callback' => 'drupal_get_form',
     'page arguments' => array('entity_embed_wysiwyg_admin_form'),
     'access arguments' => array('administer entity_embed_wysiwyg'),
@@ -37,7 +37,7 @@ function entity_embed_wysiwyg_menu() {
     'type' => MENU_LOCAL_TASK,
   );
   $items['admin/config/content/wysiwyg/entity_embed/entity_edit/%/%'] = array(
-    'title' => t('Edit Entity'),
+    'title' => 'Edit Entity',
     'page callback' => 'entity_embed_wysiwyg_edit_entity',
     'page arguments' => array(6, 7),
     'access callback' => 'entity_embed_wysiwyg_edit_entity_access',
@@ -80,7 +80,7 @@ function entity_embed_wysiwyg_wysiwyg_plugin($editor, $version) {
  *
  * @param int $entity_id
  *   ID of entity for which an edit form is being loaded.
- * @param string $entity_Type
+ * @param string $entity_type
  *   Type of entity for which an edit form is being loaded.
  *
  * @return string
@@ -99,7 +99,7 @@ function entity_embed_wysiwyg_edit_entity_access($entity_id, $entity_type) {
  *
  * @param int $entity_id
  *   ID of entity for which an edit form is being loaded.
- * @param string $entity_Type
+ * @param string $entity_type
  *   Type of entity for which an edit form is being loaded.
  *
  * @return string
@@ -118,12 +118,12 @@ function entity_embed_wysiwyg_edit_entity($entity_id, $entity_type) {
 }
 
 /**
- * Implements hook_js_alter()
+ * Implements hook_js_alter().
  */
 function entity_embed_wysiwyg_js_alter(&$javascript) {
   $current_path = current_path();
   if ($current_path == 'admin/config/content/wysiwyg/entity_embed/select' ||
-      strpos($current_path, 'admin/config/content/wysiwyg/entity_embed/entity_edit') !== false) {
+      strpos($current_path, 'admin/config/content/wysiwyg/entity_embed/entity_edit') !== FALSE) {
     // Remove admin_menu.
     admin_menu_suppress();
 
@@ -134,7 +134,7 @@ function entity_embed_wysiwyg_js_alter(&$javascript) {
 }
 
 /**
- * Implements hook_css_alter()
+ * Implements hook_css_alter().
  */
 function entity_embed_wysiwyg_css_alter(&$css) {
   if (current_path() == 'admin/config/content/wysiwyg/entity_embed/select') {
