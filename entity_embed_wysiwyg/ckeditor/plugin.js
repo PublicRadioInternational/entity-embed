@@ -22,13 +22,13 @@
                 window.entity_embed_wysiwyg_entity.id,
                 '" data-entity-type="',
                 window.entity_embed_wysiwyg_entity.type,
-                '">[[entity_id:',
+                '">[[entity_id:"',
                 window.entity_embed_wysiwyg_entity.id,
-                ' entity_type:',
+                '" entity_type:"',
                 window.entity_embed_wysiwyg_entity.type,
-                ' entity_title:',
+                '" entity_title:"',
                 window.entity_embed_wysiwyg_entity.title,
-                ']]</a>'
+                '"]]</a>'
               ].join('');
               editor.insertHtml(embedString);
             }

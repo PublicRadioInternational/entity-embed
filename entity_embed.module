@@ -23,7 +23,7 @@ function entity_embed_filter_info() {
  * Process callback for entity_embed filter.
  */
 function entity_embed_filter_process($text, $filter, $format, $langcode, $cache, $cache_id) {
-  return preg_replace_callback('/\[\[entity_id:(\d+)(\s.*)?\]\]/', 'entity_embed_filter_process_token', $text);
+  return preg_replace_callback('/\[\[entity_id:\&quot\;(\d+)\&quot\;(.*?)\]\]/', 'entity_embed_filter_process_token', $text);
 }
 
 /**
@@ -82,13 +82,13 @@ function entity_embed_filter_process_token($token) {
  *   Array of key => values.
  */
 function entity_embed_filter_process_token_params($params) {
-  $params = explode(' ', ltrim($params));
+  preg_match_all('/(.*?):\&quot\;(.*?)\&quot\;/', $params, $params);
 
-  $processed_params = array();
-  foreach ($params as $param) {
-    list($key, $value)  = explode(':', $param);
-    $processed_params[$key] = $value;
+  $params_clean = array();
+  foreach ($params[0] as $param) {
+    $param = explode(':&quot;', $param);
+    $params_clean[ltrim($param[0])] = ltrim(str_replace('&quot;', '', $param[1]));
   }
 
-  return $processed_params;
+  return $params_clean;
 }
