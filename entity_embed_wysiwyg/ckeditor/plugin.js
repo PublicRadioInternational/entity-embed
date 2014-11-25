@@ -90,8 +90,11 @@
           editor.editable().attachListener(element, 'click', function() {
             var $this = $(this.$),
                 data = $this.data();
+
+            // Set ID to edit-entity.
             $this.attr('id', 'edit-entity');
-            console.log(data);
+
+            // Pass data to dialog.
             window.entity_embed_wysiwyg_entity_edit = {
               id: data['entity'],
               type: data['entity-type']
@@ -106,7 +109,6 @@
       // Add listener to editor.
       editor.on('contentDom', function() {
         var element = editor.document.getById('edit-entity');
-        console.log(element);
         launchModalOnClick(element);
       });
       editor.on('change', function() {

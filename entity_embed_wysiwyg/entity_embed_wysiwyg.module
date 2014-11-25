@@ -125,9 +125,7 @@ function entity_embed_wysiwyg_js_alter(&$javascript) {
   if ($current_path == 'admin/config/content/wysiwyg/entity_embed/select' ||
       strpos($current_path, 'admin/config/content/wysiwyg/entity_embed/entity_edit') !== false) {
     // Remove admin_menu.
-    $admin_menu_path = drupal_get_path('module', 'admin_menu');
-    unset($javascript[$admin_menu_path . '/admin_menu.js']);
-    unset($javascript[$admin_menu_path . '/admin_menu_toolbar.js']);
+    admin_menu_suppress();
 
     // Add event listeners.
     $path = drupal_get_path('module', 'entity_embed_wysiwyg') . '/ckeditor/entity_embed_wysiwyg.js';
