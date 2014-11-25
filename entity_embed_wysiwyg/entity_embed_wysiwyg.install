@@ -5,13 +5,13 @@
  */
 
 /**
- * Impliments hook_uninstall()
+ * Impliments hook_uninstall().
  */
 function entity_embed_wysiwyg_uninstall() {
 
   // Create an array of variables that should be deleted.
   $variables = array(
-    'entity_embed_wysiwyg_view'
+    'entity_embed_wysiwyg_view',
   );
 
   // Loop through variables and delete each one.
