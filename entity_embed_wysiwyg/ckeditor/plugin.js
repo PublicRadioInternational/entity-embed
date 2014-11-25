@@ -105,7 +105,8 @@
 
       // Add listener to editor.
       editor.on('contentDom', function() {
-        var element = editor.document.getById('edit-entity-unevented');
+        var element = editor.document.getById('edit-entity');
+        console.log(element);
         launchModalOnClick(element);
       });
       editor.on('change', function() {
