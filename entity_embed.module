@@ -55,7 +55,7 @@ function entity_embed_filter_process_token($token) {
 
   // View mode defaults to 'full'.
   if (!isset($params['view_mode']) || empty($params['view_mode'])) {
-    $params['view_mode'] = 'full';
+    $params['view_mode'] = 'entity_embed';
   }
 
   // Load entity object.
@@ -68,7 +68,6 @@ function entity_embed_filter_process_token($token) {
 
   // Load entity view.
   $view = entity_view($params['entity_type'], $entities, $params['view_mode']);
-
   return drupal_render($view);
 }
 
