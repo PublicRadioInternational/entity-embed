@@ -110,6 +110,9 @@
       editor.on('contentDom', function() {
         var element = editor.document.getById('edit-entity');
         launchModalOnClick(element);
+
+        var element = editor.document.getById('edit-entity-unevented');
+        launchModalOnClick(element);
       });
       editor.on('change', function() {
         var element = editor.document.getById('edit-entity-unevented');
