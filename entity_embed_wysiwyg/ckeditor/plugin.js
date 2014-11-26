@@ -18,7 +18,7 @@
           onOk: function() {
             if ('entity_embed_wysiwyg_entity' in window) {
               var embedString = [
-                '<a style="cursor:pointer" id="edit-entity-unevented" data-entity="',
+                '<a style="cursor:pointer" class="edit-entity-unevented" data-entity="',
                 window.entity_embed_wysiwyg_entity.id,
                 '" data-entity-type="',
                 window.entity_embed_wysiwyg_entity.type,
@@ -85,38 +85,38 @@
       });
 
       // Launch modal when edit-entity is clicked.
-      var launchModalOnClick = function(element) {
-        if (element) {
-          editor.editable().attachListener(element, 'click', function() {
-            var $this = $(this.$),
-                data = $this.data();
-
-            // Set ID to edit-entity.
-            $this.attr('id', 'edit-entity');
-
+      var launchModalOnClick = function($elements) {
+          // Loop through elements and attach a dialog-launching event handler.
+        $elements.each(function() {
+          var $this = $(this),
+              data = $this.data();
+          $this.bind('click', function() {
             // Pass data to dialog.
             window.entity_embed_wysiwyg_entity_edit = {
               id: data['entity'],
               type: data['entity-type']
             }
-
+            // Create new instance of dialog, and show.
             var dialog = new CKEDITOR.dialog(editor, 'edit_entity');
             dialog.show();
           });
-        }
+
+          // Mark as evented.
+          $this.removeClass('edit-entity-unevented');
+          $this.addClass('edit-entity');
+        });
       };
 
-      // Add listener to editor.
+      // When editor loads, attach dialog events to all entity_embed tokens.
       editor.on('contentDom', function() {
-        var element = editor.document.getById('edit-entity');
-        launchModalOnClick(element);
-
-        var element = editor.document.getById('edit-entity-unevented');
-        launchModalOnClick(element);
+        var elements = $(editor.window.getFrame().$).contents().find('.edit-entity, .edit-entity-unevented');
+        launchModalOnClick(elements);
       });
+
+      // When editor loads, attach dialog events to new entity_embed tokens.
       editor.on('change', function() {
-        var element = editor.document.getById('edit-entity-unevented');
-        launchModalOnClick(element);
+        var elements = $(editor.window.getFrame().$).contents().find('.edit-entity-unevented');
+        launchModalOnClick(elements);
       });
     }
   });
