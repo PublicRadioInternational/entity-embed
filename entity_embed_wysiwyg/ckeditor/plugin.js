@@ -3,19 +3,19 @@
  * JavaScript that defines the entity_embed_wysiwyg_add_token
  * button and handles events.
  */
-'use strict';
-(function($) {
+/** globals CKEDITOR $ Drupal **/
+(function ($) {
+  'use strict';
   CKEDITOR.plugins.add('entity_embed_wysiwyg_plugin', {
     requires: ['iframedialog'],
-    init: function(editor) {
-
+    init: function (editor) {
       // Create Dialog that allows users to select entities that should be embedded.
       CKEDITOR.dialog.add('select_entity', function (editor) {
         return {
           title: Drupal.t('Embed an Entity'),
           minWidth: 700,
           minHeight: 400,
-          onOk: function() {
+          onOk: function () {
             if ('entity_embed_wysiwyg_entity' in window) {
               var embedString = [
                 '<a style="cursor:pointer" class="edit-entity-unevented" data-entity="',
@@ -50,14 +50,14 @@
       // Create a command for launching the select form.
       editor.addCommand('launch_entity_embed_select', new CKEDITOR.dialogCommand('select_entity'));
 
-      // Create a Dialog that loads an edit form for embeded entities.
+      // Create a Dialog that loads an edit form for embedded entities.
       CKEDITOR.dialog.add('edit_entity', function (editor) {
         return {
           title: Drupal.t('Edit an Entity'),
           minWidth: 700,
           minHeight: 400,
           buttons: [],
-          close: function() {
+          close: function () {
             destroyCKE();
           },
           contents: [{
@@ -85,20 +85,24 @@
       });
 
       // Launch modal when edit-entity is clicked.
-      var launchModalOnClick = function($elements) {
+      var launchModalOnClick = function ($elements) {
           // Loop through elements and attach a dialog-launching event handler.
-        $elements.each(function() {
+        $elements.each(function () {
           var $this = $(this),
               data = $this.data();
-          $this.bind('click', function() {
+          $this.bind('click', function () {
             // Pass data to dialog.
             window.entity_embed_wysiwyg_entity_edit = {
-              id: data['entity'],
+              id: data.entity,
               type: data['entity-type']
-            }
-            // Create new instance of dialog, and show.
-            var dialog = new CKEDITOR.dialog(editor, 'edit_entity');
-            dialog.show();
+            };
+
+            // Load the dialog skin if it hasn't been already.
+            CKEDITOR.skin.loadPart('dialog', function () {
+              // Create new instance of dialog, and show.
+              var dialog = new CKEDITOR.dialog(editor, 'edit_entity');
+              dialog.show();
+            });
           });
 
           // Mark as evented.
@@ -108,13 +112,13 @@
       };
 
       // When editor loads, attach dialog events to all entity_embed tokens.
-      editor.on('contentDom', function() {
+      editor.on('contentDom', function () {
         var elements = $(editor.window.getFrame().$).contents().find('.edit-entity, .edit-entity-unevented');
         launchModalOnClick(elements);
       });
 
       // When editor loads, attach dialog events to new entity_embed tokens.
-      editor.on('change', function() {
+      editor.on('change', function () {
         var elements = $(editor.window.getFrame().$).contents().find('.edit-entity-unevented');
         launchModalOnClick(elements);
       });
