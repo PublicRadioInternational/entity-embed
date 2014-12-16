@@ -1,4 +1,4 @@
 name = Entity Embed
-description = Enables users to embed entities into body fiels. Provides CKEdtior integration.
+description = Enables users to embed entities in text fields. Provides CKEdtior integration.
 package = Entity
 core = 7.x
