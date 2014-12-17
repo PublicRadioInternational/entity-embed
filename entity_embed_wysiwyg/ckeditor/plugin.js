@@ -8,6 +8,9 @@
   'use strict';
   CKEDITOR.plugins.add('entity_embed_wysiwyg_plugin', {
     requires: ['iframedialog'],
+    onLoad: function() {
+      CKEDITOR.addCss('.edit-entity-unevented, .edit-entity { cursor: pointer; color: #ffffff; background: #5cb85c; padding: 4px; }');
+    },
     init: function (editor) {
       // Create Dialog that allows users to select entities that should be embedded.
       CKEDITOR.dialog.add('select_entity', function (editor) {
@@ -18,7 +21,7 @@
           onOk: function () {
             if ('entity_embed_wysiwyg_entity' in window) {
               var embedString = [
-                '<a style="cursor:pointer" class="edit-entity-unevented" data-entity="',
+                '<div class="edit-entity-unevented" data-entity="',
                 window.entity_embed_wysiwyg_entity.id,
                 '" data-entity-type="',
                 window.entity_embed_wysiwyg_entity.type,
@@ -28,7 +31,7 @@
                 window.entity_embed_wysiwyg_entity.type,
                 '" entity_title:"',
                 window.entity_embed_wysiwyg_entity.title,
-                '"]]</a>'
+                '"]]</div>'
               ].join('');
               editor.insertHtml(embedString);
             }
