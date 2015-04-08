@@ -87,7 +87,11 @@ function entity_embed_wysiwyg_wysiwyg_plugin($editor, $version) {
  *   HTML page of edit form for given entity.
  */
 function entity_embed_wysiwyg_edit_entity_access($entity_id, $entity_type) {
+<<<<<<< HEAD
   if (user_access('edit ' . $entity_name . ' in entity_embed_wysiwyg dialog')) {
+=======
+  if (user_access('edit ' . $entity_type . ' in entity_embed_wysiwyg dialog')) {
+>>>>>>> master
     return TRUE;
   }
 

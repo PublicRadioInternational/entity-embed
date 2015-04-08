@@ -25,6 +25,8 @@
                 window.entity_embed_wysiwyg_entity.id,
                 '" data-entity-type="',
                 window.entity_embed_wysiwyg_entity.type,
+                '" data-entity-title="',
+                window.entity_embed_wysiwyg_entity.title,
                 '">[[entity_id:"',
                 window.entity_embed_wysiwyg_entity.id,
                 '" entity_type:"',
@@ -33,6 +35,7 @@
                 window.entity_embed_wysiwyg_entity.title,
                 '"]]</div>'
               ].join('');
+              editor.execCommand('enter');
               editor.insertHtml(embedString);
             }
           },
@@ -96,7 +99,11 @@
           $this.bind('click', function () {
             // Pass data to dialog.
             window.entity_embed_wysiwyg_entity_edit = {
+<<<<<<< HEAD
               id: data.entity,
+=======
+              id: data['entity-id'],
+>>>>>>> master
               type: data['entity-type']
             };
 
