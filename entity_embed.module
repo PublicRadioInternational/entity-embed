@@ -1,0 +1,93 @@
+<?php
+/**
+ * @file
+ * Contains code that defines the entity_embed filter.
+ */
+
+/**
+ * Implements hook_filter_info().
+ */
+function entity_embed_filter_info() {
+  $filters['entity_embed'] = array(
+    'title' => t('Embed an Entity'),
+    'description' => t('This filter will convert [[entity_id:70337 entity_type:node]] into rendered entities. Required for Entity Embed WYSIWYG plugin to work.'),
+    'process callback' => 'entity_embed_filter_process',
+    'tips callback'  => 'entity_embed_filter_tips',
+    'cache' => FALSE,
+  );
+
+  return $filters;
+}
+
+/**
+ * Process callback for entity_embed filter.
+ */
+function entity_embed_filter_process($text, $filter, $format, $langcode, $cache, $cache_id) {
+  return preg_replace_callback('/\[\[entity_id:\&quot\;(\d+)\&quot\;(.*?)\]\]/', 'entity_embed_filter_process_token', $text);
+}
+
+/**
+ * Tips callback for entity_embed filter.
+ */
+function entity_embed_filter_tips($filter, $format, $long) {
+  return t('[[entity_id:70337 entity_type:node]] - Embed a (rendered) version of an entity.');
+}
+
+/**
+ * Processes an entity_embed token and context.
+ *
+ * @param array $token
+ *   Token that will be processed.
+ *
+ * @return string
+ *   HTML that should be inserted in place of the token.
+ */
+function entity_embed_filter_process_token($token) {
+  list($token, $entity_id, $params) = $token;
+
+  // Process params string.
+  $params = entity_embed_filter_process_token_params($params);
+
+  // Entity type defaults to 'node'.
+  if (!isset($params['entity_type']) || empty($params['entity_type'])) {
+    $params['entity_type'] = 'node';
+  }
+
+  // View mode defaults to 'full'.
+  if (!isset($params['view_mode']) || empty($params['view_mode'])) {
+    $params['view_mode'] = 'entity_embed';
+  }
+
+  // Load entity object.
+  $entities = entity_load($params['entity_type'], array($entity_id));
+
+  // Pass parameters to template layer.
+  foreach ($entities as &$entity) {
+    $entity->entity_embed_params = $params;
+  }
+
+  // Load entity view.
+  $view = entity_view($params['entity_type'], $entities, $params['view_mode']);
+  return drupal_render($view);
+}
+
+/**
+ * Processes an entity_embed token parameters.
+ *
+ * @param array $params
+ *   Array of parameters in the form of key:value.
+ *
+ * @return array
+ *   Array of key => values.
+ */
+function entity_embed_filter_process_token_params($params) {
+  preg_match_all('/(.*?):\&quot\;(.*?)\&quot\;/', $params, $params);
+
+  $params_clean = array();
+  foreach ($params[0] as $param) {
+    $param = explode(':&quot;', $param);
+    $params_clean[ltrim($param[0])] = ltrim(str_replace('&quot;', '', $param[1]));
+  }
+
+  return $params_clean;
+}
