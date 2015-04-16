@@ -99,11 +99,7 @@
           $this.bind('click', function () {
             // Pass data to dialog.
             window.entity_embed_wysiwyg_entity_edit = {
-<<<<<<< HEAD
               id: data.entity,
-=======
-              id: data['entity-id'],
->>>>>>> master
               type: data['entity-type']
             };
 
